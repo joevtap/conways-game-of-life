@@ -16,7 +16,6 @@ const (
 	screenHeight   = 500
 	updateInterval = 50 * time.Millisecond
 	cellSize       = 8
-	lifeChance     = 25
 )
 
 type Game struct {
@@ -35,7 +34,7 @@ func main() {
 	ebiten.SetWindowTitle("Conway's Game of Life")
 
 	game.running = false
-	game.grid = grid.New(screenWidth, screenHeight, cellSize, lifeChance)
+	game.grid = grid.New(screenWidth, screenHeight, cellSize)
 	game.lastUpdated = time.Now()
 
 	if err := ebiten.RunGame(game); err != nil {

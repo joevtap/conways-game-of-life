@@ -15,7 +15,7 @@ type Grid struct {
 	Cells    [][]cell.Cell
 }
 
-func New(screenWidth, screenHeight, cellSize, lifeChance int) Grid {
+func New(screenWidth, screenHeight, cellSize int) Grid {
 
 	width := screenWidth / cellSize
 	height := screenHeight / cellSize
