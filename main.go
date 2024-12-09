@@ -25,6 +25,9 @@ type Game struct {
 	mousePressed     bool
 	spacePressed     bool
 	backspacePressed bool
+	rPressed         bool
+	cPressed         bool
+	colored          bool
 }
 
 func main() {
@@ -50,6 +53,26 @@ func (g *Game) Update() error {
 		}
 	} else {
 		g.spacePressed = false
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyR) {
+		if !g.rPressed && !g.running {
+			g.grid.Clear()
+			g.grid.Randomize()
+			g.running = true
+			g.rPressed = true
+		}
+	} else {
+		g.rPressed = false
+	}
+
+	if ebiten.IsKeyPressed(ebiten.KeyC) {
+		if !g.cPressed {
+			g.colored = !g.colored
+			g.cPressed = true
+		}
+	} else {
+		g.cPressed = false
 	}
 
 	if ebiten.IsKeyPressed(ebiten.KeyBackspace) {
@@ -87,7 +110,7 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.grid.Draw(screen)
+	g.grid.Draw(screen, g.colored)
 
 	if g.running {
 		text.Draw(screen, "Press SPACE to stop", basicfont.Face7x13, 10, 20, color.White)
@@ -95,6 +118,8 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	} else {
 		text.Draw(screen, "Press SPACE to start", basicfont.Face7x13, 10, 20, color.White)
 		text.Draw(screen, "Click to toggle cells", basicfont.Face7x13, 10, 60, color.White)
+		text.Draw(screen, "Press \"r\" to randomly generate cells", basicfont.Face7x13, 10, 80, color.White)
+		text.Draw(screen, "Press \"c\" to toggle colored cells", basicfont.Face7x13, 10, 100, color.White)
 	}
 
 	text.Draw(screen, "Press BACKSPACE to clear", basicfont.Face7x13, 10, 40, color.White)

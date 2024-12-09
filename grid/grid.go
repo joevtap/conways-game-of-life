@@ -2,6 +2,7 @@ package grid
 
 import (
 	"image/color"
+	"math/rand"
 
 	"github.com/hajimehoshi/ebiten/v2"
 	"github.com/hajimehoshi/ebiten/v2/vector"
@@ -33,11 +34,11 @@ func New(screenWidth, screenHeight, cellSize int) Grid {
 	}
 }
 
-func (g Grid) Draw(dst *ebiten.Image) {
+func (g Grid) Draw(dst *ebiten.Image, colored bool) {
 	for y := 0; y < g.Height; y++ {
 		for x := 0; x < g.Width; x++ {
 			cell := g.Cells[y][x]
-			cell.Draw(dst, x, y, g.CellSize)
+			cell.Draw(dst, x, y, g.CellSize, colored)
 		}
 	}
 
@@ -60,10 +61,20 @@ func (g *Grid) Update() {
 			if g.Cells[y][x].Alive {
 				if aliveNeighbors < 2 || aliveNeighbors > 3 {
 					newCells[y][x].Alive = false
+					newCells[y][x].Dying = true
+					newCells[y][x].Born = false
+				} else {
+					newCells[y][x].Dying = false
+					newCells[y][x].Born = false
 				}
 			} else {
 				if aliveNeighbors == 3 {
 					newCells[y][x].Alive = true
+					newCells[y][x].Born = true
+					newCells[y][x].Dying = false
+				} else {
+					newCells[y][x].Dying = false
+					newCells[y][x].Born = false
 				}
 			}
 		}
@@ -97,6 +108,20 @@ func (g *Grid) Clear() {
 	for y := 0; y < g.Height; y++ {
 		for x := 0; x < g.Width; x++ {
 			g.Cells[y][x].Alive = false
+			g.Cells[y][x].Dying = false
+			g.Cells[y][x].Born = false
+		}
+	}
+}
+
+func (g *Grid) Randomize() {
+	for y := 0; y < g.Height; y++ {
+		for x := 0; x < g.Width; x++ {
+			if rand.Intn(2) == 0 {
+				g.Cells[y][x].Alive = true
+			} else {
+				g.Cells[y][x].Alive = false
+			}
 		}
 	}
 }
