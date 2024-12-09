@@ -34,7 +34,7 @@ func New(screenWidth, screenHeight, cellSize int) Grid {
 	}
 }
 
-func (g Grid) Draw(dst *ebiten.Image, colored bool) {
+func (g Grid) Draw(dst *ebiten.Image, colored, showGrid bool) {
 	for y := 0; y < g.Height; y++ {
 		for x := 0; x < g.Width; x++ {
 			cell := g.Cells[y][x]
@@ -43,12 +43,22 @@ func (g Grid) Draw(dst *ebiten.Image, colored bool) {
 	}
 
 	for x := 0; x < g.Width; x++ {
-		vector.StrokeLine(dst, float32(x*g.CellSize), 0, float32(x*g.CellSize), float32(g.Height*g.CellSize), 1, color.RGBA{20, 20, 20, 255}, false)
+		if showGrid {
+			vector.StrokeLine(dst, float32(x*g.CellSize), 0, float32(x*g.CellSize), float32(g.Height*g.CellSize), 1, color.RGBA{20, 20, 20, 255}, false)
+		} else {
+			vector.StrokeLine(dst, float32(x*g.CellSize), 0, float32(x*g.CellSize), float32(g.Height*g.CellSize), 1, color.RGBA{0, 0, 0, 255}, false)
+		}
 	}
 
 	for y := 0; y < g.Height; y++ {
-		vector.StrokeLine(dst, 0, float32(y*g.CellSize), float32(g.Width*g.CellSize), float32(y*g.CellSize), 1, color.RGBA{20, 20, 20, 255}, false)
+		if showGrid {
+			vector.StrokeLine(dst, 0, float32(y*g.CellSize), float32(g.Width*g.CellSize), float32(y*g.CellSize), 1, color.RGBA{20, 20, 20, 255}, false)
+		} else {
+			vector.StrokeLine(dst, 0, float32(y*g.CellSize), float32(g.Width*g.CellSize), float32(y*g.CellSize), 1, color.RGBA{0, 0, 0, 255}, false)
+
+		}
 	}
+
 }
 
 func (g *Grid) Update() {

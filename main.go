@@ -110,7 +110,7 @@ func (g *Game) Update() error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	g.grid.Draw(screen, g.colored)
+	g.grid.Draw(screen, g.colored, !g.running)
 
 	if g.running {
 		text.Draw(screen, "Press SPACE to stop", basicfont.Face7x13, 10, 20, color.White)
